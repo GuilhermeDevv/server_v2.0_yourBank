@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { CreateUserDTO } from '../dtos/createUserDTO';
+import { UpdateUserDTO } from '../dtos/updateUserDTO';
 import { UserService } from '../services/user.service';
 
 @Controller('user')
@@ -24,6 +25,15 @@ export class UserController {
   @Post('/register')
   async createUser(@Body() data: CreateUserDTO, @Res() response: Response) {
     const { message, statusCode } = await this.userService.create(data);
+    return response.json(message).status(statusCode);
+  }
+  @Patch('/update')
+  async updateUser(
+    @Body() data: UpdateUserDTO,
+    email: string,
+    @Res() response: Response,
+  ) {
+    const { message, statusCode } = await this.userService.update(data, email);
     return response.json(message).status(statusCode);
   }
 }
