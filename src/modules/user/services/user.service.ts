@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDTO } from '../dtos/createUserDTO';
+import { UpdateUserDTO } from '../dtos/updateUserDTO';
 import { PrismaRepository } from '../repositories/prisma/PrismaRepository';
 
 @Injectable()
@@ -19,6 +20,12 @@ export class UserService {
     }
     const result = await this.prismaRepository.create(data);
     return result
+      ? { message: '', statusCode: 204 }
+      : { message: 'Erro interno, entre em contato', statusCode: 500 };
+  }
+  async update(data: UpdateUserDTO, email: string) {
+    const response = await this.prismaRepository.update(data, email);
+    return response
       ? { message: '', statusCode: 204 }
       : { message: 'Erro interno, entre em contato', statusCode: 500 };
   }
