@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma';
 import { CreateUserDTO } from 'src/modules/user/dtos/createUserDTO';
 import { UserDTO } from 'src/modules/user/dtos/userDTO';
+import { UpdateUserDTO } from '../../dtos/updateUserDTO';
 import { UserRepository } from '../UserRepository';
 
 @Injectable()
@@ -36,11 +37,15 @@ export class PrismaRepository implements UserRepository {
       },
     });
   }
+  async update(data: UpdateUserDTO, email: string) {
+    const response = await this.prismaServices.user.updateMany({
+      data,
+      where: { email },
+    });
+    return response.count !== 0;
+  }
   async create({ email, name, password }: CreateUserDTO) {
     return await true;
-  }
-  update() {
-    throw new Error('Method not implemented.');
   }
   transaction() {
     throw new Error('Method not implemented.');
